@@ -17,6 +17,20 @@
 
         $(function() {
             $('#grid').kendoGrid({
+                columns: [
+                    'name',
+                    'fullName',
+                    'url',
+                    'imageUrl',
+                    {
+                        title: 'Day profit',
+                        template: '#=data.details.dayProfit#'
+                    },
+                    {
+                        title: 'Algo name',
+                        template: '#=data.details.algo#'
+                    }
+                ],
                 dataSource: {
                     data: data,
                     schema: {
