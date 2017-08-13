@@ -6,7 +6,8 @@ var expressApp = express();
 
 expressApp.get('/scrape', function(req, res){
 
-    url = 'https://whattomine.com/calculators';
+    var url = 'https://whattomine.com/calculators';
+    var currencyBaseUrl = 'https://whattomine.com';
 
     request(url, function(error, response, html){
         if(!error){
@@ -28,31 +29,84 @@ expressApp.get('/scrape', function(req, res){
                 var anchors = element.find('a');
                 var names = $(anchors[1]).html().split('<br>');
 
-                var url = $(anchors[0]).prop('href');
+                var currencyUrl = $(anchors[0]).prop('href');
                 var imageUrl = element.find('img').prop('src');
                 var name = names[1].replace('(', '').replace(')', '');
                 var fullName = names[0];
 
                 var currency = {
-                    url: url,
+                    url: currencyUrl,
                     imageUrl: imageUrl,
                     name: name,
                     fullName: fullName,
-                    details: []
+                    details: {
+                        dayProfit: null,
+                        algo: ''
+                    }
                 };
 
                 currencies.push(currency);
             });
 
-            fs.readFile('indexTemplate.html', 'utf8', function (err,data) {
-                if (err) {
-                    return console.log('Error reading template file: ', err);
-                }
+            if (currencies.length === 0) {
+                console.log('Error: No currencies found. Check for API changes');
+                res.send('Error: No currencies found. Check for API changes');
+                return;
+            }
 
-                res.send(data.replace('<!--replace-->', JSON.stringify(currencies)));
+            var requestsMade = 0;
+
+            //=== TEST ONLY ===
+            //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
+            //currencies = currencies.slice(0, 40);
+            var coinsOfInterest = ['ETC', 'ETH', 'ZEC', 'ZEN', 'SIGT'];
+            currencies = currencies.filter(function(item) {
+                return coinsOfInterest.indexOf(item.name) > -1;
             });
+            //=================
 
-            //res.send(JSON.stringify(currencies, null, 4));
+            //TODO: Optimization - write output to file and request new data from server only once an hour
+            //TODO: possibly keep old data with date prefix to watch for tendencies
+            currencies.forEach(function(value, index, array) {
+                var currentCurrency = value;
+
+                requestsMade += 1;
+
+                //needed to prevent ban from the page
+                var requestTime = 500;
+                setTimeout(function () {
+                    console.log('New request made in:', new Date());
+                    request(
+                        currencyBaseUrl + currentCurrency.url,
+                        function(nestedError, nestedResponse, nestedHtml){
+                            var n$ = cheerio.load(nestedHtml);
+                            requestsMade -= 1;
+
+                            //..this jQuery implementation does not support pseudo selectors
+                            var dayProfit = n$(n$(n$(n$('table')[0]).find('tbody tr')[1]).find('td')[6]).text().replace(/\s/g, '');
+                            var currencyName = n$('h1').text().replace(')', '').split('(')[1];
+                            var algo = n$(n$('.col-xs-3 > p')[0]).text().replace(/\s/g, '');
+
+                            if (!currentCurrency) {
+                                console.log('Error: currency not found for details inject');
+                                return;
+                            } else {
+                                var details = currentCurrency.details;
+                                details.algo = algo;
+                                details.dayProfit = dayProfit;
+                            }
+
+                            if (requestsMade === 0) {
+                                fs.readFile('indexTemplate.html', 'utf8', function (err,data) {
+                                    if (err) {
+                                        return console.log('Error reading template file: ', err);
+                                    }
+                                    res.send(data.replace('<!--replace-->', JSON.stringify(currencies)));
+                                });
+                            }
+                        });
+                }, index * requestTime);
+            });
 
             //fs.writeFile('output.json', JSON.stringify(currencies, null, 4), function(err){
             //    console.log('File successfully written.');
