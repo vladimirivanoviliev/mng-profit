@@ -6,10 +6,12 @@ var expressApp = express();
 
 expressApp.get('/scrape', function(req, res){
 
-    var url = 'https://whattomine.com/calculators';
-    var currencyBaseUrl = 'https://whattomine.com';
+    var URL = 'https://whattomine.com/calculators';
+    var CURRENCY_BASE_URL = 'https://whattomine.com';
+    //DO NOT GO BELOW 250ms, even 500ms is the safe limit
+    var REQUEST_TIME = 500;
 
-    request(url, function(error, response, html){
+    request(URL, function(error, response, html){
         if(!error){
             var $ = cheerio.load(html);
             var currencies = [];
@@ -59,10 +61,10 @@ expressApp.get('/scrape', function(req, res){
             //=== TEST ONLY ===
             //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
             //currencies = currencies.slice(0, 40);
-            var coinsOfInterest = ['ETC', 'ETH', 'ZEC', 'ZEN', 'SIGT'];
-            currencies = currencies.filter(function(item) {
-                return coinsOfInterest.indexOf(item.name) > -1;
-            });
+            //var coinsOfInterest = ['ETC', 'ETH', 'ZEC', 'ZEN', 'SIGT'];
+            //currencies = currencies.filter(function(item) {
+            //    return coinsOfInterest.indexOf(item.name) > -1;
+            //});
             //=================
 
             //TODO: Optimization - write output to file and request new data from server only once an hour
@@ -73,11 +75,10 @@ expressApp.get('/scrape', function(req, res){
                 requestsMade += 1;
 
                 //needed to prevent ban from the page
-                var requestTime = 500;
                 setTimeout(function () {
                     console.log('New request made in:', new Date());
                     request(
-                        currencyBaseUrl + currentCurrency.url,
+                        CURRENCY_BASE_URL + currentCurrency.url,
                         function(nestedError, nestedResponse, nestedHtml){
                             var n$ = cheerio.load(nestedHtml);
                             requestsMade -= 1;
@@ -104,7 +105,7 @@ expressApp.get('/scrape', function(req, res){
                                 });
                             }
                         });
-                }, index * requestTime);
+                }, index * REQUEST_TIME);
             });
 
             //fs.writeFile('output.json', JSON.stringify(currencies, null, 4), function(err){
