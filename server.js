@@ -91,9 +91,8 @@ expressApp.get('/scrape', function(req, res){
                                 console.log('Error: currency not found for details inject');
                                 return;
                             } else {
-                                var details = currentCurrency.details;
-                                details.algo = algo;
-                                details.dayProfit = dayProfit;
+                                currentCurrency.algo = algo;
+                                currentCurrency.dayProfit = dayProfit;
                             }
 
                             if (requestsMade === 0) {

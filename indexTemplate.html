@@ -24,13 +24,15 @@
                     'imageUrl',
                     {
                         title: 'Day profit',
-                        template: '#=data.details.dayProfit#'
+                        field: 'dayProfit'
                     },
                     {
                         title: 'Algo name',
-                        template: '#=data.details.algo#'
+                        field: 'algo'
                     }
                 ],
+                filterable: true,
+                sortable: true,
                 dataSource: {
                     data: data,
                     schema: {
@@ -40,7 +42,9 @@
                                 name: { type: 'string' },
                                 fullName: { type: 'string' },
                                 url: { type: 'string' },
-                                imageUrl: { type: 'string' }
+                                imageUrl: { type: 'string' },
+                                dayProfit: { type: 'string' },
+                                algo: { type: 'string' }
                             }
                         }
                     }
