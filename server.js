@@ -8,8 +8,24 @@ expressApp.get('/scrape', function(req, res){
 
     var URL = 'https://whattomine.com/calculators';
     var CURRENCY_BASE_URL = 'https://whattomine.com';
+
     //DO NOT GO BELOW 250ms, even 500ms is the safe limit
     var REQUEST_TIME = 500;
+
+    //remove ones that are hard to mine with GPU
+    var BLOCKED_CURRENCIES = [
+        //Scrypt
+        'DOGE', 'LTC',
+
+        //SHA256
+        'BTC', 'BCC', 'CRW', 'CURE', 'DEM', 'DGB', 'DGC',
+        'ARG',
+
+        //X11
+        'ADZ', 'CANN', 'CHILD', 'CKC', 'CRYPT', 'DASH', 'GB', 'GDN', 'DP', 'MIL',
+        'MND', 'MUE', 'MUN', 'ONX', 'HIRO', 'INFX', 'KARM', 'LGC', 'LIMX', 'LTCX',
+        'PXI', 'QBC', 'SMC'
+    ];
 
     request(URL, function(error, response, html){
         if(!error){
@@ -36,6 +52,13 @@ expressApp.get('/scrape', function(req, res){
                 var name = names[1].replace('(', '').replace(')', '');
                 var fullName = names[0];
 
+                if (typeof name === 'string' && name.toUpperCase() != name) {
+                    //combined currency, like Eth + Decred
+                    var temp = fullName;
+                    fullName = name + ' + ' + temp;
+                    name = name.toUpperCase() + '_' + temp.toUpperCase();
+                }
+
                 var currency = {
                     url: currencyUrl,
                     imageUrl: imageUrl,
@@ -58,13 +81,14 @@ expressApp.get('/scrape', function(req, res){
 
             var requestsMade = 0;
 
+            //remove not minable currencies
+            currencies = currencies.filter(function(item) {
+                return BLOCKED_CURRENCIES.indexOf(item.name) === -1;
+            });
+
             //=== TEST ONLY ===
             //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
-            //currencies = currencies.slice(0, 40);
-            //var coinsOfInterest = ['ETC', 'ETH', 'ZEC', 'ZEN', 'SIGT'];
-            //currencies = currencies.filter(function(item) {
-            //    return coinsOfInterest.indexOf(item.name) > -1;
-            //});
+            currencies = currencies.slice(0,80);
             //=================
 
             //TODO: Optimization - write output to file and request new data from server only once an hour
@@ -76,7 +100,7 @@ expressApp.get('/scrape', function(req, res){
 
                 //needed to prevent ban from the page
                 setTimeout(function () {
-                    console.log('New request made in:', new Date());
+                    console.log('New request made in:', new Date(), ' ', value.name);
                     request(
                         CURRENCY_BASE_URL + currentCurrency.url,
                         function(nestedError, nestedResponse, nestedHtml){
