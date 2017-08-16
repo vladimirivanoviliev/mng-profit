@@ -1,19 +1,19 @@
-var express = require('express');
-var fs = require('fs');
-var request = require('request');
-var cheerio = require('cheerio');
-var expressApp = express();
+const express = require('express');
+const fs = require('fs');
+const request = require('request');
+const cheerio = require('cheerio');
+const expressApp = express();
 
 expressApp.get('/scrape', function(req, res){
 
-    var URL = 'https://whattomine.com/calculators';
-    var CURRENCY_BASE_URL = 'https://whattomine.com';
+    const URL = 'https://whattomine.com/calculators';
+    const CURRENCY_BASE_URL = 'https://whattomine.com';
 
     //DO NOT GO BELOW 250ms, even 500ms is the safe limit
-    var REQUEST_TIME = 500;
+    const REQUEST_TIME = 500;
 
     //remove ones that are hard to mine with GPU
-    var BLOCKED_CURRENCIES = [
+    const BLOCKED_CURRENCIES = [
         //Scrypt
         'DOGE', 'LTC',
 
@@ -29,8 +29,8 @@ expressApp.get('/scrape', function(req, res){
 
     request(URL, function(error, response, html){
         if(!error){
-            var $ = cheerio.load(html);
-            var currencies = [];
+            const $ = cheerio.load(html);
+            let currencies = [];
 
             $('.list > .calculator').filter(function(){
                 //Example HTML:
@@ -43,23 +43,23 @@ expressApp.get('/scrape', function(req, res){
                 //    </div>
                 //</div>
 
-                var element = $(this);
-                var anchors = element.find('a');
-                var names = $(anchors[1]).html().split('<br>');
+                const element = $(this);
+                const anchors = element.find('a');
+                const names = $(anchors[1]).html().split('<br>');
 
-                var currencyUrl = $(anchors[0]).prop('href');
-                var imageUrl = element.find('img').prop('src');
-                var name = names[1].replace('(', '').replace(')', '');
-                var fullName = names[0];
+                const currencyUrl = $(anchors[0]).prop('href');
+                const imageUrl = element.find('img').prop('src');
+                let name = names[1].replace('(', '').replace(')', '');
+                let fullName = names[0];
 
                 if (typeof name === 'string' && name.toUpperCase() != name) {
                     //combined currency, like Eth + Decred
-                    var temp = fullName;
+                    const temp = fullName;
                     fullName = name + ' + ' + temp;
                     name = name.toUpperCase() + '_' + temp.toUpperCase();
                 }
 
-                var currency = {
+                const currency = {
                     url: currencyUrl,
                     imageUrl: imageUrl,
                     name: name,
@@ -79,38 +79,39 @@ expressApp.get('/scrape', function(req, res){
                 return;
             }
 
-            var requestsMade = 0;
+            let requestsMade = 0;
 
             //remove not minable currencies
-            currencies = currencies.filter(function(item) {
+            currencies = currencies.filter((item) => {
                 return BLOCKED_CURRENCIES.indexOf(item.name) === -1;
             });
 
             //=== TEST ONLY ===
             //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
-            currencies = currencies.slice(0,80);
+            currencies = currencies.slice(0,20);
             //=================
 
             //TODO: Optimization - write output to file and request new data from server only once an hour
             //TODO: possibly keep old data with date prefix to watch for tendencies
-            currencies.forEach(function(value, index, array) {
-                var currentCurrency = value;
+            currencies.forEach((value, index, array) => {
+                const currentCurrency = value;
 
                 requestsMade += 1;
 
                 //needed to prevent ban from the page
-                setTimeout(function () {
+                setTimeout(() => {
                     console.log('New request made in:', new Date(), ' ', value.name);
                     request(
                         CURRENCY_BASE_URL + currentCurrency.url,
-                        function(nestedError, nestedResponse, nestedHtml){
-                            var n$ = cheerio.load(nestedHtml);
+                        (nestedError, nestedResponse, nestedHtml) => {
+                            const n$ = cheerio.load(nestedHtml);
                             requestsMade -= 1;
 
                             //..this jQuery implementation does not support pseudo selectors
-                            var dayProfit = n$(n$(n$(n$('table')[0]).find('tbody tr')[1]).find('td')[6]).text().replace(/\s/g, '');
-                            var currencyName = n$('h1').text().replace(')', '').split('(')[1];
-                            var algo = n$(n$('.col-xs-3 > p')[0]).text().replace(/\s/g, '');
+                            const dayProfitValue = n$(n$(n$(n$('table')[0]).find('tbody tr')[1]).find('td')[6]).text().replace(/\s/g, '');
+                            const dayProfit = parseFloat(dayProfitValue.replace('$', ''));
+                            const currencyName = n$('h1').text().replace(')', '').split('(')[1];
+                            const algo = n$(n$('.col-xs-3 > p')[0]).text().replace(/\s/g, '');
 
                             if (!currentCurrency) {
                                 console.log('Error: currency not found for details inject');
@@ -121,7 +122,7 @@ expressApp.get('/scrape', function(req, res){
                             }
 
                             if (requestsMade === 0) {
-                                fs.readFile('indexTemplate.html', 'utf8', function (err,data) {
+                                fs.readFile('indexTemplate.html', 'utf8', (err,data) => {
                                     if (err) {
                                         return console.log('Error reading template file: ', err);
                                     }
