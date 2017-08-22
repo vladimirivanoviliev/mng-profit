@@ -14,65 +14,47 @@ import {parseSeparatedFloat, parseCustomInt, parseRelativeTime} from './util';
 
 const CLASS_PROPERTIES = ['id','name','difficulty','nethash','exchangeRate','blockTimeSeconds','lastBlock','blockReward','marketCap'];
 
-class History {
-    static parse(props) {
-        const {id, name, difficulty, nethash, exchangeRate, blockTimeSeconds,
-            lastBlock, blockReward, marketCap} = props;
+const CLASS_TYPES = {
+    id: 'number',
+    name: 'string',
+    difficulty: 'number',
+    nethash: 'number',
+    exchangeRate: 'number',
+    blockTimeSeconds: 'number',
+    lastBlock: 'number',
+    blockReward: 'number',
+    marketCap: 'number'
+};
 
-        return {
-            id: parseCustomInt(id),
-            name: name,
-            difficulty: parseSeparatedFloat(difficulty),
-            nethash: parseHashRate(nethash),
-            exchangeRate: parseSeparatedFloat(exchangeRate),
-            blockTimeSeconds: parseRelativeTime(blockTimeSeconds),
-            lastBlock: parseCustomInt(lastBlock),
-            blockReward: parseSeparatedFloat(blockReward),
-            marketCap: parseCustomInt(marketCap)
-        };
+const CLASS_PROPERTY_PARSERS = {
+    id: parseCustomInt,
+    name: (value) => {return value;},
+    difficulty: parseSeparatedFloat,
+    nethash: parseHashRate,
+    exchangeRate: parseSeparatedFloat,
+    blockTimeSeconds: parseRelativeTime,
+    lastBlock: parseCustomInt,
+    blockReward: parseSeparatedFloat,
+    marketCap: parseCustomInt
+};
+
+class History {
+    static parseProps(data) {
+        const result = CLASS_PROPERTIES.map((prop) => {
+            return CLASS_PROPERTY_PARSERS[prop](data[prop]);
+        });
+
+        return result;
     };
 
-    static isParsed(props) {
-        const {id, name, difficulty, nethash, exchangeRate, blockTimeSeconds,
-            lastBlock, blockReward, marketCap} = props;
+    static isPropsParsed(data) {
+        return CLASS_PROPERTIES.reduce((prev, prop) => {
+            return prev && data && History.isPropParsed(prop, data[prop]);
+        }, true);
+    }
 
-        if (id && typeof id !== 'number') {
-            return true;
-        }
-
-        if (name && typeof name !== 'string') {
-            return true;
-        }
-
-        if (difficulty && typeof difficulty !== 'number') {
-            return true;
-        }
-
-        if (nethash && typeof nethash !== 'number') {
-            return true;
-        }
-
-        if (exchangeRate && typeof exchangeRate !== 'number') {
-            return true;
-        }
-
-        if (blockTimeSeconds && typeof blockTimeSeconds !== 'number') {
-            return true;
-        }
-
-        if (lastBlock && typeof lastBlock !== 'number') {
-            return true;
-        }
-
-        if (blockReward && typeof blockReward !== 'number') {
-            return true;
-        }
-
-        if (marketCap && typeof marketCap !== 'number') {
-            return true;
-        }
-
-        return false;
+    static isPropParsed(prop, value) {
+        return value === undefined || typeof value === CLASS_TYPES[prop];
     }
 
     constructor(props) {
@@ -89,11 +71,19 @@ class History {
         return props;
     }
 
-    setProps(props) {
+    getProp(prop) {
+        if (!prop) {
+            return;
+        }
+
+        return this[`_${prop}`];
+    }
+
+    setProps(props) {``
         let parsedProps;
 
-        if (History.isParsed(props)) {
-            parsedProps = History.parse(props)
+        if (!History.isPropsParsed(props)) {
+            parsedProps = History.parseProps(props)
         } else {
             parsedProps = {...props};
         }
@@ -101,6 +91,18 @@ class History {
         CLASS_PROPERTIES.forEach((prop) => {
             this[`_${prop}`] = parsedProps[prop];
         });
+    }
+
+    setProp(prop, value) {
+        if (!prop || CLASS_PROPERTIES.indexOf(prop) === -1) {
+            return;
+        }
+
+        if (!History.isPropParsed(prop, value)) {
+            this[`_${prop}`] = CLASS_PROPERTY_PARSERS[prop](value);
+        } else {
+            this[`_${prop}`] = props[prop];
+        }
     }
 };
 

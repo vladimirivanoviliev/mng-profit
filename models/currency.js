@@ -23,10 +23,26 @@ class Currency {
         return props;
     }
 
+    getProp(prop) {
+        if (!prop) {
+            return;
+        }
+
+        return this[`_${prop}`];
+    }
+
     setProps(props) {
         CLASS_PROPERTIES.forEach((prop) => {
             this[`_${prop}`] = props[prop];
         });
+    }
+
+    setProp(prop, value) {
+        if (!prop || CLASS_PROPERTIES.indexOf(prop) === -1) {
+            return;
+        }
+
+        this[`_${prop}`] = props[prop];
     }
 };
 
