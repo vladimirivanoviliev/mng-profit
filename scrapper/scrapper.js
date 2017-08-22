@@ -22,6 +22,10 @@ const BLOCKED_CURRENCIES = [
 ];
 
 class Scrapper {
+    constructor(dataAccess) {
+        this._dataAccess = dataAccess;
+    }
+
     scrap() {
         request(URL, function(error, response, html){
             if(!error){
