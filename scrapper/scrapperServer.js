@@ -12,9 +12,11 @@ class ScrapperServer {
         this._scrapperInterval = setInterval(() => {
             this._scrapper.scrap();
         }, interval || DEFAULT_INTERVAL_MS);
+
+        this._scrapper.scrap();
     }
 
-    stop() {
+    exit() {
         clearInterval(this._scrapperInterval);
     }
 }

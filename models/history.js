@@ -1,4 +1,4 @@
-import {parseSeparatedFloat, parseCustomInt, parseRelativeTime} from './util';
+import {parseSeparatedFloat, parseCustomInt, parseRelativeTime, parseHashRate} from './util';
 
 /*
     `id`	INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,7 +12,8 @@ import {parseSeparatedFloat, parseCustomInt, parseRelativeTime} from './util';
     `marketCap`	INTEGER
 */
 
-const CLASS_PROPERTIES = ['id','name','difficulty','nethash','exchangeRate','blockTimeSeconds','lastBlock','blockReward','marketCap','date'];
+const CLASS_PROPERTIES = ['id','name','difficulty','nethash','exchangeRate','blockTimeSeconds',
+    'lastBlock','blockReward','marketCap','date', 'dayProfit', 'hourProfit'];
 
 const CLASS_TYPES = {
     id: 'number',
@@ -24,7 +25,9 @@ const CLASS_TYPES = {
     lastBlock: 'number',
     blockReward: 'number',
     marketCap: 'number',
-    date: 'number'
+    date: 'number',
+    dayProfit: 'number',
+    hourProfit: 'number'
 };
 
 const CLASS_PROPERTY_PARSERS = {
@@ -37,7 +40,9 @@ const CLASS_PROPERTY_PARSERS = {
     lastBlock: parseCustomInt,
     blockReward: parseSeparatedFloat,
     marketCap: parseCustomInt,
-    date: (value) => {return parseInt(value);}
+    date: (value) => {return parseInt(value);},
+    dayProfit: parseSeparatedFloat,
+    hourProfit: parseSeparatedFloat
 };
 
 class History {
@@ -63,6 +68,11 @@ class History {
         this.setProps(props);
     }
 
+    //TODO: Make static
+    getPropList() {
+        return CLASS_PROPERTIES.slice();
+    }
+
     getProps() {
         let props = {};
 
@@ -81,14 +91,8 @@ class History {
         return this[`_${prop}`];
     }
 
-    setProps(props) {``
-        let parsedProps;
-
-        if (!History.isPropsParsed(props)) {
-            parsedProps = History.parseProps(props)
-        } else {
-            parsedProps = {...props};
-        }
+    setProps(props) {
+        let parsedProps = !History.isPropsParsed(props) ? History.parseProps(props) : props;
 
         CLASS_PROPERTIES.forEach((prop) => {
             this[`_${prop}`] = parsedProps[prop];
@@ -103,7 +107,7 @@ class History {
         if (!History.isPropParsed(prop, value)) {
             this[`_${prop}`] = CLASS_PROPERTY_PARSERS[prop](value);
         } else {
-            this[`_${prop}`] = props[prop];
+            this[`_${prop}`] = value;
         }
     }
 };

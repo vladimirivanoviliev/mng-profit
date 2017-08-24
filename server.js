@@ -1,7 +1,5 @@
 import express from 'express';
 import fs from 'fs';
-import request from 'request';
-import cheerio from 'cheerio';
 import DataService from './data_access/dataService';
 import ScrapperServer from './scrapper/scrapperServer';
 
@@ -21,12 +19,35 @@ expressApp.get('/scrape', function(req, res){
     //});
 });
 
- //TEST CODE:
+const dataService = new DataService();
+const scrapper = new ScrapperServer(dataService);
 
+scrapper.start();
 
-const c = new DataService();
-//const scrapper = new ScrapperServer(new DataService());
-
-expressApp.listen(CLIENT_PORT)
+expressApp.listen(CLIENT_PORT);
 
 console.log(`Client served on port: ${CLIENT_PORT}`);
+
+function exitHandler(options, err) {
+    dataService.exit();
+    scrapper.exit();
+
+    if (options.cleanup) {
+        console.log('clean');
+    }
+
+    if (err) {
+        console.log(err.stack);
+    }
+
+    if (options.exit) {
+        process.exit();
+    }
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));

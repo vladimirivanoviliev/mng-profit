@@ -9,6 +9,8 @@ CREATE TABLE `history` (
 	`lastBlock`	INTEGER,
 	`blockReward`	REAL,
 	`marketCap`	INTEGER,
+	`dayProfit` REAL,
+	`hourProfit` REAL,
 	`date` INTEGER
 );
 CREATE TABLE "currency" (

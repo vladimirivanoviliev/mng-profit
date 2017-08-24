@@ -13,6 +13,11 @@ class Currency {
         this.setProps(props);
     }
 
+    //TODO: Make static
+    getPropList() {
+        return CLASS_PROPERTIES.slice();
+    }
+
     getProps() {
         let props = {};
 
@@ -42,7 +47,7 @@ class Currency {
             return;
         }
 
-        this[`_${prop}`] = props[prop];
+        this[`_${prop}`] = value;
     }
 };
 
