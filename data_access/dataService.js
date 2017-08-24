@@ -1,9 +1,9 @@
 import sqlite3 from 'sqlite3';
 import path from 'path';
 
-class DataAccess {
+class DataService {
     constructor() {
-        console.log('>> DataAccess dabase init');
+        console.log('>> DataService dabase init');
 
         this._db = new sqlite3.Database(path.join(__dirname, '..', 'data_base', 'mng-profit-db.sqlite3'), sqlite3.OPEN_READWRITE, (err) => {
             if (err) {
@@ -19,4 +19,4 @@ class DataAccess {
     }
 }
 
-export default DataAccess;
+export default DataService;

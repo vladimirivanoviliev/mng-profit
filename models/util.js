@@ -1,10 +1,16 @@
+
+const FLOAT_REGEX = /[^0-9\.]/g;
+const CUSTOM_INT_REGEX = /[^0-9]/g;
+const HASH_NUMBER_REGEX = /[^0-9]/g;
+const HASH_RATE_REGEX = /[^a-zA-Z]/g;
+
 const parseSeparatedFloat = (number) => {
     if (!number) {
         return 0;
     }
 
     if (typeof number === 'string') {
-        number = number.replace(/[^0-9\.]/g, '');
+        number = number.replace(FLOAT_REGEX, '');
     }
     
     return parseFloat(number);
@@ -12,7 +18,7 @@ const parseSeparatedFloat = (number) => {
 
 const parseCustomInt = (number) => {
     if (typeof number === 'string') {
-        number = number.replace(/[^0-9]/g, '');
+        number = number.replace(CUSTOM_INT_REGEX, '');
     }
 
     return parseInt(number) || 0;
@@ -45,8 +51,8 @@ const parseHashRate = (hashString) => {
         return 0;
     }
 
-    const hashNumber = number.replace(/[^0-9]/g, '');
-    const hashRate = number.split('/')[0].replace(/[^a-zA-Z]/g, '');
+    const hashNumber = number.replace(HASH_NUMBER_REGEX, '');
+    const hashRate = number.split('/')[0].replace(HASH_RATE_REGEX, '');
 
     switch(hashRate) {
         case 'h':

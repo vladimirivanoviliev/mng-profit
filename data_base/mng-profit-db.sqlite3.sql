@@ -8,7 +8,8 @@ CREATE TABLE `history` (
 	`blockTimeSeconds`	INTEGER,
 	`lastBlock`	INTEGER,
 	`blockReward`	REAL,
-	`marketCap`	INTEGER
+	`marketCap`	INTEGER,
+	`date` INTEGER
 );
 CREATE TABLE "currency" (
 	`name`	TEXT NOT NULL UNIQUE,

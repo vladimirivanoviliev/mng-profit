@@ -12,7 +12,7 @@ import {parseSeparatedFloat, parseCustomInt, parseRelativeTime} from './util';
     `marketCap`	INTEGER
 */
 
-const CLASS_PROPERTIES = ['id','name','difficulty','nethash','exchangeRate','blockTimeSeconds','lastBlock','blockReward','marketCap'];
+const CLASS_PROPERTIES = ['id','name','difficulty','nethash','exchangeRate','blockTimeSeconds','lastBlock','blockReward','marketCap','date'];
 
 const CLASS_TYPES = {
     id: 'number',
@@ -23,7 +23,8 @@ const CLASS_TYPES = {
     blockTimeSeconds: 'number',
     lastBlock: 'number',
     blockReward: 'number',
-    marketCap: 'number'
+    marketCap: 'number',
+    date: 'number'
 };
 
 const CLASS_PROPERTY_PARSERS = {
@@ -35,7 +36,8 @@ const CLASS_PROPERTY_PARSERS = {
     blockTimeSeconds: parseRelativeTime,
     lastBlock: parseCustomInt,
     blockReward: parseSeparatedFloat,
-    marketCap: parseCustomInt
+    marketCap: parseCustomInt,
+    date: (value) => {return parseInt(value);}
 };
 
 class History {

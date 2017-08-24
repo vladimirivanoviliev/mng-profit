@@ -2,7 +2,7 @@ import express from 'express';
 import fs from 'fs';
 import request from 'request';
 import cheerio from 'cheerio';
-import DataAccess from './data_service/dataAccess';
+import DataService from './data_access/dataService';
 import ScrapperServer from './scrapper/scrapperServer';
 
 const expressApp = express();
@@ -24,8 +24,8 @@ expressApp.get('/scrape', function(req, res){
  //TEST CODE:
 
 
-const c = new DataAccess();
-//const scrapper = new ScrapperServer(new DataAccess());
+const c = new DataService();
+//const scrapper = new ScrapperServer(new DataService());
 
 expressApp.listen(CLIENT_PORT)
 
