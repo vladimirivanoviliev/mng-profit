@@ -113,23 +113,52 @@ class Scrapper {
 
                                 const currencyName = n$('h1').text().replace(')', '').split('(')[1];
                                 const algorithm = n$(n$('.col-xs-3 > p')[0]).text().replace(/\s/g, '');
-                                //TODO: ADD MISSING PROPS:
-                                //`name`	TEXT,
-                                //`difficulty`	REAL,
-                                //`nethash`	REAL,
-                                //`exchangeRate`	REAL,
-                                //`blockTimeSeconds`	INTEGER,
-                                //`lastBlock`	INTEGER,
-                                //`blockReward`	REAL,
-                                //`marketCap`	INTEGER,
-                                //`date` INTEG
+                                const date = new Date().getTime();
 
-                                //TODO: ADD MISSING DATABASE FIELDS LIKE PROFITS
+                                const mainColumns = n$(n$('div.row')[1]).children();
+
+                                const titles = [];
+                                const values = [];
+                                const textreplacer = /[^a-zA-Z]/g;
+
+                                n$(mainColumns[0])
+                                    .children()
+                                    .add(n$(mainColumns[2]).children())
+                                    .each(function() {
+                                        titles.push(n$(this)
+                                                    .text()
+                                                    .toLowerCase()
+                                                    .replace(textreplacer,''));
+                                    });
+
+                                n$(mainColumns[1])
+                                    .children()
+                                    .add(n$(mainColumns[3]).children())
+                                    .each(function() {
+                                        values.push(n$(this).text().trim());
+                                    });
+
+                                const columns = {};
+
+                                for(let i = 0; i < titles.length; i++) {
+                                    columns[titles[i]] = values[i];
+                                }
+
+                                const {blocktime, difficulty, nethash, exrate,
+                                        lastblock, blreward, marketcap} = columns;
 
                                 const currentHistory = new History({
                                     name: currentCurrency.getProp('name'),
                                     dayProfit,
-                                    hourProfit
+                                    hourProfit,
+                                    date,
+                                    difficulty: difficulty,
+                                    nethash: nethash,
+                                    exchangeRate: exrate,
+                                    blockTimeSeconds: blocktime,
+                                    lastBlock: lastblock,
+                                    blockReward: blreward,
+                                    marketCap: marketcap
                                 });
 
                                 //TODO: check for existing records or directly update?

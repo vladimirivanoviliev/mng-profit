@@ -79,7 +79,9 @@ class History {
         let props = {};
 
         CLASS_PROPERTIES.forEach((prop) => {
-            props[prop] = this[`_${prop}`];
+            if (prop !== 'id') {
+                props[prop] = this[`_${prop}`];
+            }
         });
 
         return props;
