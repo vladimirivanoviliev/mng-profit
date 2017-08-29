@@ -47,8 +47,10 @@ const CLASS_PROPERTY_PARSERS = {
 
 class History {
     static parseProps(data) {
-        const result = CLASS_PROPERTIES.map((prop) => {
-            return CLASS_PROPERTY_PARSERS[prop](data[prop]);
+        const result = {};
+
+        CLASS_PROPERTIES.forEach((prop) => {
+            result[prop] = CLASS_PROPERTY_PARSERS[prop](data[prop]);
         });
 
         return result;

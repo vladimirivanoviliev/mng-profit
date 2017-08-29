@@ -28,7 +28,7 @@ const parseRelativeTime = (timeString) => {
     let seconds = 0;
     const timeParts = timeString.split(' ');
     timeParts.forEach((item) => {
-        const current = parseInt(current);
+        const current = parseInt(item);
 
         if (item.indexOf('h')) {
             seconds += current * 60 * 60;
@@ -46,7 +46,7 @@ const parseRelativeTime = (timeString) => {
     return seconds;
 };
 
-const parseHashRate = (hashString) => {
+const parseHashRate = (number) => {
     if (!number) {
         return 0;
     }
