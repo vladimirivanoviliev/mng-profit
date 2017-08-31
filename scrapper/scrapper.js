@@ -23,7 +23,10 @@ const BLOCKED_CURRENCIES = [
     //X11
     'ADZ', 'CANN', 'CHILD', 'CKC', 'CRYPT', 'DASH', 'GB', 'GDN', 'DP', 'MIL',
     'MND', 'MUE', 'MUN', 'ONX', 'HIRO', 'INFX', 'KARM', 'LGC', 'LIMX', 'LTCX',
-    'PXI', 'QBC', 'SMC'
+    'PXI', 'QBC', 'SMC', 'SIB', 'START', 'URO', 'XC',
+
+    //X13
+    'AMBER', 'BURN', 'CLOAK', 'CLOAK', 'SLG', 'VEIL', 'XHC'
 ];
 
 class Scrapper {
