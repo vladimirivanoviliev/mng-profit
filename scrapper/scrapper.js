@@ -51,10 +51,11 @@ class Scrapper {
 
                         const currencyUrl = $(anchors[0]).prop('href');
                         const imageUrl = element.find('img').prop('src');
+                        const nameIsInBrackets = names[1].indexOf('(') > -1;
                         let name = names[1].replace('(', '').replace(')', '');
                         let fullName = names[0];
 
-                        if (typeof name === 'string' && name.toUpperCase() != name) {
+                        if (typeof name === 'string' && (!nameIsInBrackets || name.toUpperCase() != name)) {
                             //combined currency, like Eth + Decred
                             const temp = fullName;
                             fullName = name + ' + ' + temp;
