@@ -108,7 +108,7 @@ class Scrapper {
                                 const hourProfitValue = n$(n$(n$(n$('table')[0]).find('tbody tr')[0]).find('td')[6]).text().replace(/\s/g, '');
                                 const dayProfitValue = n$(n$(n$(n$('table')[0]).find('tbody tr')[1]).find('td')[6]).text().replace(/\s/g, '');
 
-                                const hourProfit = parseFloat(dayProfitValue.replace('$', ''));
+                                const hourProfit = parseFloat(hourProfitValue.replace('$', ''));
                                 const dayProfit = parseFloat(dayProfitValue.replace('$', ''));
 
                                 const currencyName = n$('h1').text().replace(')', '').split('(')[1];
@@ -172,7 +172,7 @@ class Scrapper {
                                         } else {
                                             if (data.algorithm === algorithm) {
                                                 this._dataService
-                                                    .update('currency', 'name', data.name, 'algorithm', algorithm + 'trolol');
+                                                    .update('currency', 'name', data.name, 'algorithm', algorithm);
                                             }
                                         }
                                     });

@@ -1,7 +1,7 @@
 
 const FLOAT_REGEX = /[^0-9\.]/g;
 const CUSTOM_INT_REGEX = /[^0-9]/g;
-const HASH_NUMBER_REGEX = /[^0-9]/g;
+const HASH_NUMBER_REGEX = /[^0-9\.]/g;
 const HASH_RATE_REGEX = /[^a-zA-Z]/g;
 
 const parseSeparatedFloat = (number) => {
@@ -52,7 +52,7 @@ const parseHashRate = (number) => {
     }
 
     let hashNumber = number.replace(HASH_NUMBER_REGEX, '');
-    const hashRate = number.split('/')[0].replace(HASH_RATE_REGEX, '');
+    const hashRate = number.split('/')[0].replace(HASH_RATE_REGEX, '').toLowerCase();
 
     switch(hashRate) {
         case 'h':
