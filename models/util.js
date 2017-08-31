@@ -30,15 +30,15 @@ const parseRelativeTime = (timeString) => {
     timeParts.forEach((item) => {
         const current = parseInt(item);
 
-        if (item.indexOf('h')) {
+        if (item.indexOf('h') > -1) {
             seconds += current * 60 * 60;
         }
 
-        if (item.indexOf('m')) {
+        if (item.indexOf('m') > -1) {
             seconds += current * 60;
         }
 
-        if (item.indexOf('s')) {
+        if (item.indexOf('s') > -1) {
             seconds += current;
         }
     });
