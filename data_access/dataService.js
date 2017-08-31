@@ -16,6 +16,26 @@ class DataService {
         });
     }
 
+    _genericErrorHandler(err) {
+        console.log('>>> Error iterating with the database: ', err);
+    }
+
+    update(tableName, idFieldName, idFieldValue, fieldName, fieldValue) {
+        return new Promise((resolve, reject) => {
+            this._db.run(`UPDATE ${tableName} SET ${fieldName} = '${fieldValue}' WHERE ${idFieldName} = '${idFieldValue}'`, function(err) {
+                if (err) {
+                    console.log('>>> Error iterating with the database: ', err);
+                    reject({
+                        error: err
+                    });
+                } else {
+                    console.log(`Row(s) updated: ${this.changes}`);
+                    resolve(this.changes);
+                }
+              });
+        });
+    }
+
     insert(tableName, props) {
         if (!tableName || !props) {
             return;
@@ -31,42 +51,53 @@ class DataService {
 
         const placeholders = fieldValues.map((value) => '?').join(',');
 
-        this._db.run(`INSERT INTO ${tableName}(${fieldNames}) VALUES(${placeholders})`, fieldValues, function(err) {
-            if (err) {
-                return console.log(err.message);
-            }
-            // get the last insert id
-            console.log(`A row has been inserted with rowid ${this.lastID}`);
+        return new Promise((resolve, reject) => {
+            this._db.run(`INSERT INTO ${tableName}(${fieldNames}) VALUES(${placeholders})`, fieldValues, function(err) {
+                if (err) {
+                    console.log('>>> Error iterating with the database: ', err);
+                    reject({
+                        error: err
+                    });
+                } else {
+                    console.log(`A row has been inserted with rowid ${this.lastID}`);
+                    resolve(this.lastID);
+                }
+            });
         });
     }
 
-    getFirstByFieldValue(tableName, fieldName, fieldValue) {
-        if (!tableName || !fieldName || !fieldValue) {
-            return;
-        }
-
-        this._db.serialize(() => {
-            this._db.get(`SELECT * FROM ${tableName} WHERE ${fieldName} = '${fieldValue}'`, (err, row) => {
-                console.log('>>' + JSON.stringify(row));
+    getFirst(tableName, fieldName, fieldValue) {
+        return new Promise((resolve, reject) => {
+            this._db.serialize(() => {
+                this._db.get(`SELECT * FROM ${tableName} WHERE ${fieldName} = '${fieldValue}'`, (err, row) => {
+                    if (err) {
+                        console.log('>>> Error iterating with the database: ', err);
+                        reject({
+                            error: err
+                        });
+                    } else {
+                        resolve(row);
+                    }
+                });
             });
         });
     }
 
     getAll(tableName) {
-        if (!tableName) {
-            return;
-        }
-
-        this._db.serialize(() => {
-            this._db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
-
-              if (err) {
-                console.error(err.message);
-              }
-
-              console.log('>>' + JSON.stringify(rows));
+        return new Promise((resolve, reject) => {
+            this._db.serialize(() => {
+                this._db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
+                    if (err) {
+                        console.log('>>> Error iterating with the database: ', err);
+                        reject({
+                            error: err
+                        });
+                    } else {
+                        resolve(rows);
+                    }
+                });
             });
-          });
+        });
     }
 
     exit() {

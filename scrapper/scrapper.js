@@ -9,7 +9,7 @@ const URL = 'https://whattomine.com/calculators';
 const CURRENCY_BASE_URL = 'https://whattomine.com';
 
 //DO NOT GO BELOW 250ms, even 500ms is the safe limit
-const REQUEST_TIME = 500;
+const REQUEST_TIME = 1000;
 
 //remove ones that are hard to mine with GPU
 const BLOCKED_CURRENCIES = [
@@ -84,7 +84,7 @@ class Scrapper {
     
                 //=== TEST ONLY ===
                 //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
-                currencies = currencies.slice(0,10);
+                //currencies = currencies.slice(0,2);
                 //=================
     
                 //TODO: Optimization - write output to file and request new data from server only once an hour
@@ -164,8 +164,21 @@ class Scrapper {
                                 //TODO: check for existing records or directly update?
                                 currentCurrency.setProp('algorithm', algorithm);
 
-                                this._dataService.insert('currency', currentCurrency.getProps());
-                                this._dataService.insert('history', currentHistory.getProps());
+                                this._dataService
+                                    .getFirst('currency', 'name', currentCurrency.getProp('name'))
+                                    .then((data) => {
+                                        if (!data) {
+                                            this._dataService.insert('currency', currentCurrency.getProps());
+                                        } else {
+                                            if (data.algorithm === algorithm) {
+                                                this._dataService
+                                                    .update('currency', 'name', data.name, 'algorithm', algorithm + 'trolol');
+                                            }
+                                        }
+                                    });
+
+                                this._dataService
+                                    .insert('history', currentHistory.getProps());
 
                                 //if (requestsMade === 0) {
                                     //console.log('>> All data read:', JSON.stringify(currentHistory));

@@ -5,24 +5,30 @@ import ScrapperServer from './scrapper/scrapperServer';
 
 const expressApp = express();
 const CLIENT_PORT = '8081';
-
-expressApp.get('/scrape', function(req, res){
-    //Load data from the database
-    //const data = ['EXAMPLE DATA FROM DB'];
-
-    //Serve the loaded data to the client
-    //fs.readFile('indexTemplate.html', 'utf8', (err,data) => {
-    //    if (err) {
-    //        return console.log('Error reading template file: ', err);
-    //    }
-    //    res.send(data.replace('<!--replace-->', JSON.stringify(currencies)));
-    //});
-});
-
 const dataService = new DataService();
 const scrapper = new ScrapperServer(dataService);
 
 scrapper.start();
+
+expressApp.get('/', function(req, res){
+    //Load data from the database
+   dataService.getAll('currency')
+        .then((currencyData) => {
+            dataService.getAll('history')
+                .then((historyData) => {
+                    //Serve the loaded data to the client
+                    fs.readFile('indexTemplate.html', 'utf8', (err,data) => {
+                        if (err) {
+                            return console.log('Error reading template file: ', err);
+                        }
+
+                        res.send(data
+                            .replace('<!--replaceCurrencyData-->', JSON.stringify(currencyData))
+                            .replace('<!--replaceHistoryData-->', JSON.stringify(historyData)));
+                    });
+                });
+        });
+});
 
 expressApp.listen(CLIENT_PORT);
 

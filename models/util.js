@@ -51,7 +51,7 @@ const parseHashRate = (number) => {
         return 0;
     }
 
-    const hashNumber = number.replace(HASH_NUMBER_REGEX, '');
+    let hashNumber = number.replace(HASH_NUMBER_REGEX, '');
     const hashRate = number.split('/')[0].replace(HASH_RATE_REGEX, '');
 
     switch(hashRate) {

@@ -13,7 +13,8 @@
 <body>
     <div id="grid"></div>
     <script>
-        var data = JSON.parse('<!--replace-->');
+        var currencyData = JSON.parse('<!--replaceCurrencyData-->');
+        var historyData = JSON.parse('<!--replaceHistoryData-->');
 
         $(function() {
             $('#grid').kendoGrid({
@@ -23,18 +24,15 @@
                     'url',
                     'imageUrl',
                     {
-                        title: 'Day profit',
-                        field: 'dayProfit'
-                    },
-                    {
                         title: 'Algo name',
-                        field: 'algo'
+                        field: 'algorithm'
                     }
                 ],
                 filterable: true,
                 sortable: true,
+                detailInit: detailInit,
                 dataSource: {
-                    data: data,
+                    data: currencyData,
                     schema: {
                         model: {
                             id: 'name',
@@ -43,14 +41,24 @@
                                 fullName: { type: 'string' },
                                 url: { type: 'string' },
                                 imageUrl: { type: 'string' },
-                                dayProfit: { type: 'number' },
-                                algo: { type: 'string' }
+                                algorithm: { type: 'string' }
                             }
                         }
                     }
                 }
             });
         });
+
+
+        function detailInit(e) {
+            $("<div/>").appendTo(e.detailCell).kendoGrid({
+                dataSource: {
+                    data: historyData,
+                    filter: { field: "name", operator: "eq", value: e.data.name }
+                },
+                sortable: true,
+            });
+        }
     </script>
 </body>
 </html>
