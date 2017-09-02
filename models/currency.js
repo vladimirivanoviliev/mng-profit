@@ -6,7 +6,7 @@
     `algorithm`	TEXT,
 */
 
-const CLASS_PROPERTIES = ['name','fullName', 'url', 'imageUrl', 'algorithm'];
+const CLASS_PROPERTIES = ['name','fullName', 'url', 'imageUrl', 'algorithm', 'date'];
 
 class Currency {
     constructor(props) {

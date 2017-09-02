@@ -67,7 +67,8 @@ class Scrapper {
                             fullName: fullName,
                             url: currencyUrl,
                             imageUrl: imageUrl,
-                            algorithm: ''
+                            algorithm: '',
+                            date: new Date()
                         });
 
                         currencies.push(currency);

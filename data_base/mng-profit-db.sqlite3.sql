@@ -19,6 +19,7 @@ CREATE TABLE "currency" (
 	`url`	TEXT,
 	`imageUrl`	TEXT,
 	`algorithm`	TEXT,
+	`date` INTEGER,
 	PRIMARY KEY(`name`)
 );
 COMMIT;
