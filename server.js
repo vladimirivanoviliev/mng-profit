@@ -7,8 +7,16 @@ const expressApp = express();
 const CLIENT_PORT = '8081';
 const dataService = new DataService();
 const scrapper = new ScrapperServer(dataService);
+let program = require('commander');
 
-scrapper.start();
+program
+    .version('0.1.0')
+    .option('--interval <milliseconds>', 'Specifies the interval used for scraping the data.', parseInt)
+    .parse(process.argv);
+
+if(program.interval !== 0) {
+    scrapper.start(program.interval);
+}
 
 expressApp.get('/', function(req, res){
     //Load data from the database
