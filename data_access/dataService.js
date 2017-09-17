@@ -1,5 +1,6 @@
 import sqlite3 from 'sqlite3';
 import path from 'path';
+import currenciesQuery from './currencies-query';
 
 class DataService {
     //Help: http://www.sqlitetutorial.net/sqlite-nodejs/
@@ -89,6 +90,23 @@ class DataService {
                 this._db.all(`SELECT * FROM ${tableName}`, (err, rows) => {
                     if (err) {
                         console.log('>>> Error iterating with the database: ', err);
+                        reject({
+                            error: err
+                        });
+                    } else {
+                        resolve(rows);
+                    }
+                });
+            });
+        });
+    }
+
+    currencies() {
+        return new Promise((resolve, reject) => {
+            this._db.serialize(() => {
+                this._db.all(currenciesQuery(), (err, rows) => {
+                    if (err) {
+                        console.log('>>> Error loading currencies: ', err);
                         reject({
                             error: err
                         });
