@@ -20,7 +20,7 @@ if(program.interval !== 0) {
 
 expressApp.get('/', function(req, res){
     //Load data from the database
-   dataService.getAll('currency')
+   dataService.currencies()
         .then((currencyData) => {
             dataService.getAll('history')
                 .then((historyData) => {

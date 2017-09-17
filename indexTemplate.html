@@ -22,39 +22,37 @@
                     'name',
                     'fullName',
                     'url',
-                    'imageUrl',
-                    {
-                        title: 'Algo name',
-                        field: 'algorithm'
-                    }
+                    'algorithm',
+                    { field: 'dayProfit', format: "{0:n2}" },
+                    { field: 'avgWeek', format: "{0:n2}" },
+                    { field: 'avgMonth', format: "{0:n2}" }
                 ],
                 filterable: true,
                 sortable: true,
                 detailInit: detailInit,
                 dataSource: {
-                    data: currencyData,
-                    schema: {
-                        model: {
-                            id: 'name',
-                            fields: {
-                                name: { type: 'string' },
-                                fullName: { type: 'string' },
-                                url: { type: 'string' },
-                                imageUrl: { type: 'string' },
-                                algorithm: { type: 'string' }
-                            }
-                        }
-                    }
+                    data: currencyData
                 }
             });
         });
-
 
         function detailInit(e) {
             $("<div/>").appendTo(e.detailCell).kendoGrid({
                 dataSource: {
                     data: historyData,
-                    filter: { field: "name", operator: "eq", value: e.data.name }
+                    filter: { field: "name", operator: "eq", value: e.data.name },
+                    sort: { field: "date", dir: "desc" },
+                    schema: {
+                        model: {
+                            fields: {
+                                date: {
+                                    parse: function(value) {
+                                        return new Date(value);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 },
                 sortable: true,
             });
