@@ -2,11 +2,13 @@ import express from 'express';
 import fs from 'fs';
 import DataService from './data_access/dataService';
 import ScrapperServer from './scrapper/scrapperServer';
+import ReaderServer from './trading/readerServer';
 
 const expressApp = express();
 const CLIENT_PORT = '8081';
 const dataService = new DataService();
 const scrapper = new ScrapperServer(dataService);
+const tradingReader = new ReaderServer(dataService);
 let program = require('commander');
 
 program
@@ -16,6 +18,7 @@ program
 
 if(program.interval !== 0) {
     scrapper.start(program.interval);
+    tradingReader.start();
 }
 
 expressApp.get('/', function(req, res){

@@ -73,32 +73,32 @@ class Scrapper {
 
                         currencies.push(currency);
                 });
-    
+
                 if (currencies.length === 0) {
                     console.log('Error: No currencies found. Check for API changes');
                     res.send('Error: No currencies found. Check for API changes');
                     return;
                 }
-    
+
                 let requestsMade = 0;
-    
+
                 //remove not minable currencies
                 currencies = currencies.filter((item) => {
                     return BLOCKED_CURRENCIES.indexOf(item.getProp('name')) === -1;
                 });
-    
+
                 //=== TEST ONLY ===
                 //REDUCE THE NUMBER OF REQUESTS TO AVOID BLOCKING.
                 //currencies = currencies.slice(0,2);
                 //=================
-    
+
                 //TODO: Optimization - write output to file and request new data from server only once an hour
                 //TODO: possibly keep old data with date prefix to watch for tendencies
                 currencies.forEach((value, index, array) => {
                     const currentCurrency = value;
-    
+
                     requestsMade += 1;
-    
+
                     //needed to prevent ban from the page
                     setTimeout(() => {
                         console.log('New request made in:', new Date(), ' ', currentCurrency.getProp('name'));
