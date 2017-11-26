@@ -14,19 +14,29 @@ const REQUEST_TIME = 1000;
 //remove ones that are hard to mine with GPU
 const BLOCKED_CURRENCIES = [
     //Scrypt
-    'DOGE', 'LTC',
+    'DOGE', 'LTC', 'XPY', 'DUO', 'ARI', 'NYAN', 'BTM', 'NVC', 'IEC', 'MOON', 'EMC2',
+    'WDC', 'SCORE', 'GAME', 'LINX', 'PINK', 'MEC', 'XVG', 'AUR', 'POT', 'NOTE', 'NLG',
+    'CAT', 'RBY', 'BTA', 'RDD', 'XMY', 'CAP', 'CBX', 'VIA', 'BOB', 'DOPE', 'EAC', 'EPC',
+    'FLT', 'FST', 'GLC', 'GOAL', 'LGD', 'MEOW', 'NAUT', 'RIPO', 'RPC', 'RZR', 'SAT2', 'TIPS',
+    'USDE', 'USDE_USDE',
 
     //SHA256
     'BTC', 'BCC', 'CRW', 'CURE', 'DEM', 'DGB', 'DGC',
-    'ARG',
+    'ARG', 'BCH', 'PPC', 'MZC', 'CROC', 'ZET', 'SPC', 'NMC', 'UNB', 'UNO',
 
     //X11
     'ADZ', 'CANN', 'CHILD', 'CKC', 'CRYPT', 'DASH', 'GB', 'GDN', 'DP', 'MIL',
     'MND', 'MUE', 'MUN', 'ONX', 'HIRO', 'INFX', 'KARM', 'LGC', 'LIMX', 'LTCX',
-    'PXI', 'QBC', 'SMC', 'SIB', 'START', 'URO', 'XC',
+    'PXI', 'QBC', 'SMC', 'SIB', 'START', 'URO', 'XC', 'CRM', 'XMCC', 'DPC', 'MARU',
 
     //X13
-    'AMBER', 'BURN', 'CLOAK', 'CLOAK', 'SLG', 'VEIL', 'XHC'
+    'AMBER', 'BURN', 'CLOAK', 'CLOAK', 'SLG', 'VEIL', 'XHC',
+
+    //QUARK
+    'AMS', 'QRK', 'DNET', 'SRC', 'GEO',
+
+    //EOL
+    'BELA',
 ];
 
 class Scrapper {

@@ -91,6 +91,8 @@ class KrakenReader {
                     const result = Object.keys(responseBody.result).map((pairName) => {
                         const pairInfo = responseBody.result[pairName];
 
+                        console.log('>>> Pair info available: ', !!pairInfo);
+
                         const currentTicker = new Ticker({
                             pairName: pairName,
                             sourceCurrency: CURRENCY_PAIRS_FOR_LOAD[pairName].source,
