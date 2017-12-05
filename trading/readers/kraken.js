@@ -15,13 +15,13 @@ const ALL_CURRENCY_PAIRS_LIST = [
 
 const CURRENCY_PAIRS_FOR_LOAD = {
     //load USD as well?
-    DASHEUR: {source: 'DASH', destination: 'EUR'},
-    XXBTZEUR: {source: 'XBT', destination: 'EUR'},
-    BCHEUR: {source: 'BCH', destination: 'EUR'},
-    XZECZEUR: {source: 'ZEC', destination: 'EUR'},
-    XZECXXBT: {source: 'ZEC', destination: 'XBT'},
-    XETCZEUR: {source: 'ETC', destination: 'EUR'},
-    XETHZEUR: {source: 'ETH', destination: 'EUR'}
+    DASHEUR: { source: 'DASH', destination: 'EUR' },
+    XXBTZEUR: { source: 'XBT', destination: 'EUR' },
+    BCHEUR: { source: 'BCH', destination: 'EUR' },
+    XZECZEUR: { source: 'ZEC', destination: 'EUR' },
+    XZECXXBT: { source: 'ZEC', destination: 'XBT' },
+    XETCZEUR: { source: 'ETC', destination: 'EUR' },
+    XETHZEUR: { source: 'ETH', destination: 'EUR' }
 };
 
 const TICKER_API_URL = 'https://api.kraken.com/0/public/Ticker?pair=';
@@ -55,8 +55,14 @@ class KrakenReader {
         const requestUrl = SERVER_TIME_API_URL;
 
         request(requestUrl, (error, response, html) => {
-            if(!error){
-                const responseBody = JSON.parse(response.body);
+            if (!error) {
+                let responseBody;
+                try {
+                    responseBody = JSON.parse(response.body);
+                } catch(e) {
+                    console.log('>>> KRAKEN SERVER DOWN. NO VALID JSON RESPONSE.');
+                    return;
+                }
 
                 if (responseBody.error.length > 0) {
                     console.log('>>> KRAKEN SERVER TIME API READ ERROR', responseBody.error);
@@ -81,8 +87,14 @@ class KrakenReader {
 
         const timeStamp = this._serverTime + (new Date().getTime() - this._serverTimeTimeStamp);
         request(requestUrl, (error, response, html) => {
-            if(!error){
-                const responseBody = JSON.parse(response.body);
+            if (!error) {
+                let responseBody;
+                try {
+                    responseBody = JSON.parse(response.body);
+                } catch(e) {
+                    console.log('>>> KRAKEN SERVER DOWN. NO VALID JSON RESPONSE.');
+                    return;
+                }
 
                 if (responseBody.error.length > 0) {
                     console.log('>>> KRAKEN TICKER API READ ERROR', responseBody.error);
