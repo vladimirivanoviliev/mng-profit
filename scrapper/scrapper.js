@@ -130,7 +130,7 @@ class Scrapper {
                                 const algorithm = n$(n$('.col-xs-3 > p')[0]).text().replace(/\s/g, '');
                                 const date = new Date().getTime();
 
-                                const mainColumns = n$(n$('div.row')[1]).children();
+                                const mainColumns = n$(n$('div.row')[3]).children();
 
                                 const titles = [];
                                 const values = [];

@@ -17,8 +17,10 @@ program
     .parse(process.argv);
 
 if(program.interval !== 0) {
+    //=========== STARTING DATA LOADERS ================
     scrapper.start(program.interval);
     tradingReader.start();
+    //==================================================
 }
 
 expressApp.get('/', function(req, res){
