@@ -116,8 +116,9 @@ class Scrapper {
                         request(
                             CURRENCY_BASE_URL + currentCurrency.getProp('url'),
                             (nestedError, nestedResponse, nestedHtml) => {
+                                let n$;
                                 try {
-                                    const n$ = cheerio.load(nestedHtml);
+                                   n$ = cheerio.load(nestedHtml);
                                 }
                                 catch(e) {
                                     console.log('>>> ERROR: NO HTML, response: ', nestedHtml);
