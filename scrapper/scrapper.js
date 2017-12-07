@@ -122,6 +122,7 @@ class Scrapper {
                                 }
                                 catch(e) {
                                     console.log('>>> ERROR: NO HTML, response: ', nestedHtml);
+                                    return;
                                 }
 
                                 requestsMade -= 1;
