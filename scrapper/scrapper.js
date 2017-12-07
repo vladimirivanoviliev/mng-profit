@@ -9,7 +9,7 @@ const URL = 'https://whattomine.com/calculators';
 const CURRENCY_BASE_URL = 'https://whattomine.com';
 
 //DO NOT GO BELOW 250ms, even 500ms is the safe limit
-const REQUEST_TIME = 1000;
+const REQUEST_TIME = 1500;
 
 //remove ones that are hard to mine with GPU
 const BLOCKED_CURRENCIES = [
