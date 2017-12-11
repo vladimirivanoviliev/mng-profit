@@ -3,7 +3,7 @@ import KrakenReader from './readers/kraken';
 //Interval here should be increased if api calls increase (interval per API?)
 //For example Kraken allows 1 request per 3 seconds - that why if you have 4 api calls
 //you need to increase this to 12000ms to avoid block.
-const DEFAULT_INTERVAL_MS = 60000;
+const DEFAULT_INTERVAL_MS = 1200000;
 
 class ReaderServer {
     constructor(dataService) {

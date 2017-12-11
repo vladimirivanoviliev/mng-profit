@@ -1,6 +1,6 @@
 import Scrapper from './scrapper';
 
-const DEFAULT_INTERVAL_MS = 1800000;
+const DEFAULT_INTERVAL_MS = 7200000;
 
 class ScrapperServer {
     constructor(dataService) {
