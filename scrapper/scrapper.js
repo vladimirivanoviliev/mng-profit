@@ -253,7 +253,6 @@ class Scrapper {
 
                 if (currencies.length === 0) {
                     console.log('Error: No currencies found. Check for API changes');
-                    res.send('Error: No currencies found. Check for API changes');
                     return;
                 }
 
