@@ -36,7 +36,7 @@ const BLOCKED_CURRENCIES = [
     'AMS', 'QRK', 'DNET', 'SRC', 'GEO',
 
     //EOL
-    'BELA', 'JHA'
+    'BELA', 'JHA', 'JPC'
 ];
 
 const CURRENCY_HASHRATE_MAP = {
