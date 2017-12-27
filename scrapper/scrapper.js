@@ -94,6 +94,11 @@ const CURRENCY_HASHRATE_MAP = {
         hr: 47.5,
         p: 190,
         cost: 0.15
+    },
+    lyra2z: {
+        hr: 2900,
+        p: 160,
+        cost: 0.15
     }
 };
 
