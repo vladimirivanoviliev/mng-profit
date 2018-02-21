@@ -39,6 +39,8 @@ const BLOCKED_CURRENCIES = [
     'BELA', 'JHA', 'JPC'
 ];
 
+
+//1080ti hashrate map
 const CURRENCY_HASHRATE_MAP = {
     ethash: {
         hr: 35,
