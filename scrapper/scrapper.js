@@ -75,6 +75,11 @@ const CURRENCY_HASHRATE_MAP = {
         p: 190,
         cost: 0.15
     },
+    blake2s: {
+        hr: 6000,
+        p: 190,
+        cost: 0.15
+    },
     blake2b: {
         hr: 2800,
         p: 190,
