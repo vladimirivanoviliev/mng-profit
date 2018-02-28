@@ -36,7 +36,10 @@ const BLOCKED_CURRENCIES = [
     'AMS', 'QRK', 'DNET', 'SRC', 'GEO',
 
     //EOL
-    'BELA', 'JHA', 'JPC'
+    'BELA', 'JHA', 'JPC',
+
+    //BLAKE
+    'SC', 'DCR'
 ];
 
 
