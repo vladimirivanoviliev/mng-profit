@@ -12,11 +12,55 @@
 </head>
 <body>
     <div id="grid"></div>
+    <style>
+        .k-grid tr td:last-child {
+            padding: 0 !important;
+            position: relative;
+        }
+
+        .days-old {
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
     <script>
         var currencyData = JSON.parse('<!--replaceCurrencyData-->');
         var historyData = JSON.parse('<!--replaceHistoryData-->');
+        var currencyDataMap = {};
+        var daysOldColor = (days) => {
+            var color;
+
+            if (days < 7) {
+                color = '#ffa5b1';
+            } else if (days < 30) {
+                color = '#fcf1a1';
+            } else {
+                color = '#b6fca1';
+            }
+
+            return color;
+        };
 
         $(function() {
+            historyData.forEach(item => {
+                if (!currencyDataMap[item.name] || currencyDataMap[item.name] > item.date) {
+                    currencyDataMap[item.name] = item.date;
+                }
+            });
+
+            Object
+                .keys(currencyDataMap)
+                .forEach(currency => {
+                    var currencyDate = currencyDataMap[currency];
+                    currencyDataMap[currency] =  Math.ceil((new Date() - new Date(currencyDate)) / 1000 / 60 / 60 / 24);
+            });
+
             $('#grid').kendoGrid({
                 columns: [
                     'name',
@@ -25,7 +69,12 @@
                     'algorithm',
                     { field: 'dayProfit', format: "{0:n2}" },
                     { field: 'avgWeek', format: "{0:n2}" },
-                    { field: 'avgMonth', format: "{0:n2}" }
+                    { field: 'avgMonth', format: "{0:n2}" },
+                    {
+                        title: 'Days Old',
+                        width: 70,
+                        template: '<div class="days-old" style="background: #=daysOldColor(2)#">#=currencyDataMap[data.name]#</div>'
+                    }
                 ],
                 filterable: true,
                 sortable: true,
