@@ -39,7 +39,10 @@ const BLOCKED_CURRENCIES = [
     'BELA', 'JHA', 'JPC',
 
     //BLAKE
-    'SC', 'DCR'
+    'SC', 'DCR',
+
+    //WTF
+    'CACH'
 ];
 
 
