@@ -18,10 +18,10 @@ const BLOCKED_CURRENCIES = [
     'WDC', 'SCORE', 'GAME', 'LINX', 'PINK', 'MEC', 'XVG', 'AUR', 'POT', 'NOTE', 'NLG',
     'CAT', 'RBY', 'BTA', 'RDD', 'XMY', 'CAP', 'CBX', 'VIA', 'BOB', 'DOPE', 'EAC', 'EPC',
     'FLT', 'FST', 'GLC', 'GOAL', 'LGD', 'MEOW', 'NAUT', 'RIPO', 'RPC', 'RZR', 'SAT2', 'TIPS',
-    'USDE', 'USDE_USDE',
+    'USDE', 'USDE_USDE', 'FLO',
 
     //SHA256
-    'BTC', 'BCC', 'CRW', 'CURE', 'DEM', 'DGB', 'DGC',
+    'BTC', 'BCC', 'CRW', 'CURE', 'DEM', 'DGB', 'DGC', 'UNIT',
     'ARG', 'BCH', 'PPC', 'MZC', 'CROC', 'ZET', 'SPC', 'NMC', 'UNB', 'UNO',
 
     //X11
