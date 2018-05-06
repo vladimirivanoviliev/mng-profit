@@ -49,7 +49,7 @@ const BLOCKED_CURRENCIES = [
 //1080ti hashrate map
 const CURRENCY_HASHRATE_MAP = {
     ethash: {
-        hr: 35,
+        hr: 50,
         p: 140,
         cost: 0.15
     },
