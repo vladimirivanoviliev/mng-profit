@@ -42,7 +42,13 @@ const BLOCKED_CURRENCIES = [
     'SC', 'DCR',
 
     //WTF
-    'CACH'
+    'CACH',
+
+    //PASCAL
+    'PASC', 'PASL',
+
+    //Cryptonight
+    'BCN', 'ETN', 'XDN', 'KRB', 'DCY', 'XMO'
 ];
 
 
